@@ -25,6 +25,10 @@ public class App
         	modifClass.addMethod(m);
         	modifClass.writeFile();
         	
+        	modifClass.toClass();
+        	BinOp essai = new BinOp();
+        	//essai.hello();
+        	
         }
 
         catch(Throwable exc) {
