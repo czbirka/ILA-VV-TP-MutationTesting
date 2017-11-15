@@ -1,5 +1,10 @@
 package m2.ila.fr.istic.ila.vv;
 
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
+import javassist.bytecode.analysis.FramePrinter;
+
 public class App {
 	
 	private static final String CLASS_FILES_FOLDER = "somePath";
@@ -8,8 +13,22 @@ public class App {
 
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NotFoundException {
 //		verifyParams(args);
+		
+		FramePrinter framePrinter = new FramePrinter(System.out);
+		
+		// Container for all the class that are be loaded by Javassist
+		ClassPool pool = ClassPool.getDefault();
+		
+		// On indique au pool où trouver les classes
+		pool.appendClassPath("target/classes");
+
+		// non complet de la classe BinOp
+		CtClass binOpClass = pool.getCtClass("m2.ila.fr.istic.ila.vv.BinOp");
+		
+		// Impression de toutes les méthodes (avec leur body) de la classe
+		FramePrinter.print(binOpClass, System.out);
 		
 	}
 	
