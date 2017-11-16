@@ -11,6 +11,7 @@ import javassist.expr.MethodCall;
 
 public class App {
 
+	private static final String JAVA_DOT_CLASS_TO_MUTATE = "m2.ila.fr.istic.ila.vv.BinOp";
 	private static final String CLASS_FILES_FOLDER = "somePath";
 	private static final String TEST_SUITE_FOLDER = "anotherPath";
 
@@ -26,7 +27,7 @@ public class App {
 		pool.appendClassPath("target/classes");
 
 		// non complet de la classe à modifier
-		CtClass binOpClass = pool.getCtClass("m2.ila.fr.istic.ila.vv.BinOp");
+		CtClass binOpClass = pool.getCtClass(JAVA_DOT_CLASS_TO_MUTATE);
 		final String className = binOpClass.getName();
 		System.err.println("Nom de la classe à modifier " + className);
 
@@ -38,13 +39,27 @@ public class App {
 			final CtClass returnType = method.getReturnType();
 
 			if (returnType.equals(CtClass.voidType)) {
+				
 				System.out.println("name: " + method.getName() + ":: void");
+			
 			} else if (returnType.equals(CtClass.doubleType)) {
+				
 				System.out.println("name: " + method.getName() + "::double");
+				performDoubleMutation(pool, JAVA_DOT_CLASS_TO_MUTATE);
+				
 			} else if (returnType.equals(CtClass.booleanType)) {
+				
 				System.out.println("name: " + method.getName() + "::boolean");
+
 			}
 		} // End For
+	}
+
+	private static void performDoubleMutation(ClassPool pool, String className) throws NotFoundException {
+		CtClass mutant = pool.getCtClass(className);
+		
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static void verifyParams(String[] args) {
