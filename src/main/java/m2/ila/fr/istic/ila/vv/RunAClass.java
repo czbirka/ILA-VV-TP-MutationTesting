@@ -18,5 +18,17 @@ public class RunAClass {
         System.out.println(String.format("| RUN: %d", result.getRunCount()));
 
     }
+    
+    public static void provideTest(Class<?> clazz) {
+
+        JUnitCore core = new JUnitCore();
+//        Result result = core.run(BinOpTest.class, AnotherInputTest.class);
+        Result result = core.run(clazz);
+        System.out.println("FINISHED");
+        System.out.println(String.format("| IGNORED: %d", result.getIgnoreCount()));
+        System.out.println(String.format("| FAILURES: %d", result.getFailureCount()));
+        System.out.println(String.format("| RUN: %d", result.getRunCount()));
+
+    }
 
 }

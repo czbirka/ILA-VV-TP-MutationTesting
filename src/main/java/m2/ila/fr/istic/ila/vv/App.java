@@ -35,31 +35,43 @@ public class App {
 		// CtMethod[] methods = binOpClass.getMethods();
 		CtMethod[] methods = binOpClass.getDeclaredMethods(); // Celles Déclarées
 
-		for (CtMethod method : methods) {
+		for (CtMethod method : methods) { // Boucle sur les methodes
 			final CtClass returnType = method.getReturnType();
 
 			if (returnType.equals(CtClass.voidType)) {
-				
+				// VoidOperator
 				System.out.println("name: " + method.getName() + ":: void");
 			
 			} else if (returnType.equals(CtClass.doubleType)) {
-				
+				// DoubleOperator
 				System.out.println("name: " + method.getName() + "::double");
-				performDoubleMutation(pool, JAVA_DOT_CLASS_TO_MUTATE);
+				performDoubleMutation(binOpClass, method, JAVA_DOT_CLASS_TO_MUTATE);
 				
 			} else if (returnType.equals(CtClass.booleanType)) {
-				
+				// BooleanOperator
 				System.out.println("name: " + method.getName() + "::boolean");
 
 			}
+			// ArithmeticOperator
+
+			// ExtraOperatpr
+
+			// EtcOperator
 		} // End For
+		
+		binOpClass.detach();
+		binOpClass.debugWriteFile("debugOutput");
 	}
 
-	private static void performDoubleMutation(ClassPool pool, String className) throws NotFoundException {
-		CtClass mutant = pool.getCtClass(className);
-		
+	private static void performDoubleMutation(CtClass original, CtMethod method, String className)
+			throws NotFoundException, CannotCompileException {
+		double arbirtraryValue = 123456.789;
+		String mutateCode = "{ return " + arbirtraryValue + "; }";
+		method.setBody(mutateCode);
+
 		// TODO Auto-generated method stub
-		
+		System.out.println("method was mutated => " + method.getName());
+		RunAClass.main(null);
 	}
 
 	private static void verifyParams(String[] args) {
