@@ -2,7 +2,10 @@ package m2.ila.fr.istic.ila.vv.mutation;
 
 import java.util.List;
 
+import javassist.NotFoundException;
 import m2.ila.fr.istic.ila.vv.BinOpTest;
+import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
+import m2.ila.fr.istic.ila.vv.mutation.operator.DoubleOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.MutationOperator;
 import m2.ila.fr.istic.ila.vv.target.Target;
 import m2.ila.fr.istic.ila.vv.test.Test;
@@ -29,7 +32,26 @@ public class MutationController {
 		
 		targets.add(target1);
 		
+		MutationOperator operator1 = new BooleanOperator();
+		MutationOperator operator2 = new DoubleOperator();
 		
+		mutators.add(operator1);
+		mutators.add(operator2);
 		
 	}
+	
+	public void checkMutations() throws NotFoundException {
+		for(Target target : targets) {
+			for(MutationOperator mutator : mutators) {
+				mutator.checkMutate(target, targetPath);
+			}
+		}
+	}
+	
+	public void doMutations() {
+		for(MutationOperator mutator : mutators) {
+			mutator.doMutate();
+		}
+	}
+	
 }
