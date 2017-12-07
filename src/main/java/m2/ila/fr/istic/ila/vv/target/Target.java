@@ -1,5 +1,6 @@
 package m2.ila.fr.istic.ila.vv.target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import m2.ila.fr.istic.ila.vv.test.Test;
@@ -11,11 +12,20 @@ public class Target {
 	
 	public Target(String name) {
 		this.name = name;
+		this.tests = new ArrayList<Test>();
 	}
 	
-	public void addTest(Test test)
-	{
-		this.tests.add(test);
-	}
 	
+
+	public List<Test> getTests() {
+		return tests;
+	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
 }

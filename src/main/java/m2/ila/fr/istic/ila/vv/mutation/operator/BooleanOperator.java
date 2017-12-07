@@ -1,5 +1,6 @@
 package m2.ila.fr.istic.ila.vv.mutation.operator;
 
+import javassist.CtMethod;
 import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class BooleanOperator implements MutationOperator {
@@ -9,7 +10,7 @@ public class BooleanOperator implements MutationOperator {
 
 	}
 
-	public void checkMutate(Target target, String targetPath) {
+	public void checkMutate(CtMethod method) {
 		// TODO Auto-generated method stub
 		
 	}
