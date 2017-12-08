@@ -9,23 +9,18 @@ public class Target {
 
 	private String name;
 	private List<Test> tests;
-	
+
 	public Target(String name) {
 		this.name = name;
 		this.tests = new ArrayList<Test>();
 	}
-	
-	
 
 	public List<Test> getTests() {
 		return tests;
 	}
 
-
-
 	public String getName() {
 		return name;
 	}
-
 
 }

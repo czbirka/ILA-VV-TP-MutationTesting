@@ -6,14 +6,8 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.analysis.FramePrinter;
-import javassist.expr.ExprEditor;
-import javassist.expr.MethodCall;
 
 public class App {
-
-	private static final String JAVA_DOT_CLASS_TO_MUTATE = "m2.ila.fr.istic.ila.vv.BinOp";
-	private static final String CLASS_FILES_FOLDER = "somePath";
-	private static final String TEST_SUITE_FOLDER = "anotherPath";
 
 	public static void main(String[] args) throws NotFoundException, CannotCompileException {
 		// verifyParams(args);
@@ -24,10 +18,10 @@ public class App {
 		ClassPool pool = ClassPool.getDefault();
 
 		// On indique au pool où trouver les classes
-		pool.appendClassPath("target/classes");
+		pool.appendClassPath(Properties.TARGET_CLASSE_CLASSPATH);
 
 		// non complet de la classe à modifier
-		CtClass binOpClass = pool.getCtClass(JAVA_DOT_CLASS_TO_MUTATE);
+		CtClass binOpClass = pool.getCtClass(Properties.JAVA_DOT_CLASS_TO_MUTATE);
 		final String className = binOpClass.getName();
 		System.err.println("Nom de la classe à modifier " + className);
 
@@ -40,16 +34,16 @@ public class App {
 
 			if (returnType.equals(CtClass.voidType)) {
 				// VoidOperator
-				System.out.println("name: " + method.getName() + ":: void");
-			
+				System.out.println("name: " + method.getName() + Constants.VOID_TYPE_METHOD);
+
 			} else if (returnType.equals(CtClass.doubleType)) {
 				// DoubleOperator
-				System.out.println("name: " + method.getName() + "::double");
-				performDoubleMutation(binOpClass, method, JAVA_DOT_CLASS_TO_MUTATE);
-				
+				System.out.println("name: " + method.getName() + Constants.DOUBLE_TYPE_METHOD);
+				performDoubleMutation(binOpClass, method, Properties.JAVA_DOT_CLASS_TO_MUTATE);
+
 			} else if (returnType.equals(CtClass.booleanType)) {
 				// BooleanOperator
-				System.out.println("name: " + method.getName() + "::boolean");
+				System.out.println("name: " + method.getName() + Constants.BOOLEAN_TYPE_METHOD);
 
 			}
 			// ArithmeticOperator
@@ -58,9 +52,9 @@ public class App {
 
 			// EtcOperator
 		} // End For
-		
+
 		binOpClass.detach();
-		binOpClass.debugWriteFile("debugOutput");
+		binOpClass.debugWriteFile(Properties.OUTPUT_DIRECTORY);
 	}
 
 	private static void performDoubleMutation(CtClass original, CtMethod method, String className)

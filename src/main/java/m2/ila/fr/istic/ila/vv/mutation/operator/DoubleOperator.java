@@ -3,10 +3,10 @@ package m2.ila.fr.istic.ila.vv.mutation.operator;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import m2.ila.fr.istic.ila.vv.Constants;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation1;
 import m2.ila.fr.istic.ila.vv.target.Target;
@@ -27,7 +27,7 @@ public class DoubleOperator implements MutationOperator {
 	public void checkMutate(Target target, CtMethod method) throws NotFoundException {
 		CtClass returnType = method.getReturnType();
 		if (returnType.equals(CtClass.doubleType)) {
-			System.out.println("name: " + method.getName() + "::double");
+			System.out.println("name: " + method.getName() + Constants.DOUBLE_TYPE_METHOD );
 			Mutation mutation = new Mutation1(target, method);
 			mutations.add(mutation);
 		}
