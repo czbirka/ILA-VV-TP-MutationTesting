@@ -7,6 +7,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.DoubleOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.MutationOperator;
@@ -19,6 +20,7 @@ public class MutationController {
 	private String testPath;
 	
 	private List<Target> targets;
+	private List<Test> tests;
 	private List<MutationOperator> mutators;
 	private ClassLoader classLoader;
 	
@@ -67,7 +69,7 @@ public class MutationController {
 				
 				//on passe les méthodes aux mutateurs pour vérification
 				for (MutationOperator mutator : mutators) {
-					mutator.checkMutate(method);
+					mutator.checkMutate(target, method);
 				}
 				
 			}
@@ -80,8 +82,15 @@ public class MutationController {
 	
 	public void doMutations() {
 		for(MutationOperator mutator : mutators) {
-			mutator.doMutate();
+			for(Mutation mutation : mutator.getMutations()) {
+				mutator.doMutate(mutation);
+				doTests();
+			}
 		}
+	}
+	
+	public void doTests() {
+		
 	}
 	
 }
