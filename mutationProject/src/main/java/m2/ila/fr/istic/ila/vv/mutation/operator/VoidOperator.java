@@ -22,7 +22,6 @@ public class VoidOperator implements MutationOperator {
 
 	public void checkMutate(Target target, CtMethod method) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public List<Mutation> getMutations() {

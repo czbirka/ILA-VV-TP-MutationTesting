@@ -29,7 +29,7 @@ public class MutationTestingApp {
 
 		mutationController.checkMutations();
 
-		//mutationController.doMutations();
+		mutationController.doMutations();
 
 	}
 

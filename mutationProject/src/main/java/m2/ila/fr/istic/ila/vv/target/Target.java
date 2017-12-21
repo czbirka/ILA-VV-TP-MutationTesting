@@ -37,4 +37,14 @@ public class Target {
 		this.path = path;
 	}
 
+	public boolean contientTest(String name) {
+		
+		for(Test t : tests) {
+			if(t.getName().equals(name)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

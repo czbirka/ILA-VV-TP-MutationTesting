@@ -10,7 +10,7 @@ public class RunAClass {
     public static void main(String[] args) {
 
         JUnitCore core = new JUnitCore();
-//        Result result = core.run(BinOpTest.class, AnotherInputTest.class);
+       // Result result = core.run(BinOpTest.class, AnotherInputTest.class);
 //        Result result = core.run(BinOpTest.class);
 //        System.out.println("FINISHED");
 //        System.out.println(String.format("| IGNORED: %d", result.getIgnoreCount()));
