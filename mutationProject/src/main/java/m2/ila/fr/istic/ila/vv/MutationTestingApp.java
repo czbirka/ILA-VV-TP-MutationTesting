@@ -3,6 +3,7 @@ package m2.ila.fr.istic.ila.vv;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.EnumSet;
 import java.util.Properties;
 
 import org.apache.maven.shared.invoker.MavenInvocationException;
@@ -12,6 +13,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import m2.ila.fr.istic.ila.vv.mutation.MutationController;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
+import m2.ila.fr.istic.ila.vv.mutation.operator.Operator;
 
 public class MutationTestingApp {
 
@@ -20,6 +22,7 @@ public class MutationTestingApp {
 		PropertiesLoader propertiesLoader = PropertiesLoader.getInstance();
 		Properties properties = new Properties();
     	properties=propertiesLoader.getProperties();
+    	
     	
 		MutationController mutationController = new MutationController(properties.getProperty("TARGET_DIRECTORY"), 
 				properties.getProperty("TEST_DIRECTORY"));

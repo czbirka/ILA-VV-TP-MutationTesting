@@ -26,6 +26,10 @@ public class TargetsLoader {
 		List<String> listName = new ArrayList<String>(Arrays.asList(properties.getProperty("TARGETS").split(",")));
 		
 		for(String name : listName) {
+			
+			int o=2;
+			o=5;
+			
 			List<String> listTest = new ArrayList<String>(Arrays.asList(properties.getProperty(name).split(",")));
 			
 			for(String test : listTest) {

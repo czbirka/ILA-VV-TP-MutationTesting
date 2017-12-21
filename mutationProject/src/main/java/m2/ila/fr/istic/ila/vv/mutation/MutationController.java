@@ -12,6 +12,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
+import m2.ila.fr.istic.ila.vv.mutation.loader.OperatorsLoader;
 import m2.ila.fr.istic.ila.vv.mutation.loader.TargetsLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
@@ -30,6 +31,7 @@ public class MutationController {
 	private List<MutationOperator> mutators;
 	private ClassLoader classLoader;
 	private TargetsLoader targetsLoader;
+	private OperatorsLoader operatorsLoader;
 	
 	public MutationController(String targetPath, String testPath) throws IOException {
 		this.targetPath = targetPath;
@@ -38,25 +40,14 @@ public class MutationController {
 		targetsLoader = new TargetsLoader();
 		this.targets = targetsLoader.getTargets();
 		
+		operatorsLoader = new OperatorsLoader();
+		this.mutators = operatorsLoader.getOperators();
 		
-//		this.targets = new ArrayList<Target>();
-		this.mutators = new ArrayList<MutationOperator>();
+		//MutationOperator operator1 = new BooleanOperator();
+		//MutationOperator operator2 = new ArithmeticOperator();
 		
-		//pour test avant mise en place du loader
-//		Test test1 = new Test("BinOpTest");
-//		Target target1 = new Target("BinOp", test1);
-//		Test test2 = new Test("BinOpTest2");
-//		target1.getTests().add(test1);
-//		target1.getTests().add(test2);
-//		target1.setTest(test1);
-//		
-//		targets.add(target1);
-		
-		MutationOperator operator1 = new BooleanOperator();
-		MutationOperator operator2 = new ArithmeticOperator();
-		
-		mutators.add(operator1);
-		mutators.add(operator2);
+		//mutators.add(operator1);
+		//mutators.add(operator2);
 		
 	}
 	
