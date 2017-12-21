@@ -128,7 +128,21 @@ public class MutationController {
 					if(mutation.getTarget().getName().equals(c.getSimpleName())) {
 						
 						System.out.println("pouet");
-						mutation.getMethod().setBody(mutation.getMutateCode());
+						if (targetClass.isFrozen()) {
+							targetClass.defrost();
+						}
+						
+						CtMethod[] targetMethods = targetClass.getDeclaredMethods();
+						// Boucle sur les methodes
+						for (CtMethod method : targetMethods) {
+							if(method.getName().equals(mutation.getMethod().getName())) {
+								method.setBody(mutation.getMutateCode());
+							}
+							
+						}
+						
+						
+						//mutation.getMethod().setBody(mutation.getMutateCode());
 
 						System.out.println("method was mutated => " + mutation.getMethod().getName());
 						
