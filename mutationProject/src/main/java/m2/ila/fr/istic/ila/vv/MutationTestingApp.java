@@ -27,7 +27,7 @@ public class MutationTestingApp {
 		MutationController mutationController = new MutationController(properties.getProperty("TARGET_DIRECTORY"), 
 				properties.getProperty("TEST_DIRECTORY"));
 
-		//mutationController.checkMutations();
+		mutationController.checkMutations();
 
 		//mutationController.doMutations();
 

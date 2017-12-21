@@ -34,6 +34,7 @@ public class MutationController {
 	private OperatorsLoader operatorsLoader;
 	
 	public MutationController(String targetPath, String testPath) throws IOException {
+		
 		this.targetPath = targetPath;
 		this.testPath = testPath;
 		
@@ -43,45 +44,58 @@ public class MutationController {
 		operatorsLoader = new OperatorsLoader();
 		this.mutators = operatorsLoader.getOperators();
 		
-		//MutationOperator operator1 = new BooleanOperator();
-		//MutationOperator operator2 = new ArithmeticOperator();
-		
-		//mutators.add(operator1);
-		//mutators.add(operator2);
-		
 	}
 	
 	public void checkMutations() throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException {
 		
 		ClassPool pool = ClassPool.getDefault();
-		pool.appendClassPath(targetPath + "/target/classes");		
+		//pool.appendClassPath(targetPath + "/target/classes");		
+		pool.appendClassPath(targetPath);
 		ClassLoader classLoader = new ClassLoader();
+		//List<Class<?>> classes = classLoader
+		//		.getClassesFromDirectory(targetPath + "/target/classes");
 		List<Class<?>> classes = classLoader
-				.getClassesFromDirectory(targetPath + "/target/classes");
+				.getClassesFromDirectory(targetPath);
 		
 		//on passe en revue tous les fichiers cible
 		for(Class<?> c : classes) {
-			System.out.println(c.getName());
+			
 			CtClass targetClass = pool.getCtClass(c.getName());
 			final String targetClassName = targetClass.getName();
-			System.err.println("Nom de la classe à modifier :" + targetClassName);
+			for(Target target : targets) {
+				if(target.getName().equals(c.getSimpleName())) {
+					
+					System.err.println("Nom de la classe à modifier :" + targetClassName);
+					
+					// Liste des méthodes
+					CtMethod[] methods = targetClass.getDeclaredMethods();
+					
+					// Boucle sur les methodes
+					for (CtMethod method : methods) {
+						System.out.println("Method name: " + method.getName());
+						
+						//on passe les méthodes aux mutateurs pour vérification
+						for (MutationOperator mutator : mutators) {
+							mutator.checkMutate(target, method);
+						}
+						
+					}
+					
+					
+				}
+			}
+			
+			
+			//System.out.println(c.getName());
+			//System.out.println(c.getSimpleName());
+			
+			
+			
 			
 //			// On crée la classe
 //			Target target = new Target(c.getName(), null /* TODO a redeffini*/);
 //			
-//			// Liste des méthodes
-//			CtMethod[] methods = targetClass.getDeclaredMethods();
 //			
-//			// Boucle sur les methodes
-//			for (CtMethod method : methods) {
-//				System.out.println("Method name: " + method.getName());
-//				
-//				//on passe les méthodes aux mutateurs pour vérification
-//				for (MutationOperator mutator : mutators) {
-//					mutator.checkMutate(target, method);
-//				}
-//				
-//			}
 			
 		}
 

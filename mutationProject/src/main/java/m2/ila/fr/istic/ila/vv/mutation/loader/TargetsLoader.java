@@ -27,16 +27,18 @@ public class TargetsLoader {
 		
 		for(String name : listName) {
 			
-			int o=2;
-			o=5;
+			Target trgt = new Target(name);
+			trgt.setPath(properties.getProperty("TARGET_DIRECTORY"));
 			
 			List<String> listTest = new ArrayList<String>(Arrays.asList(properties.getProperty(name).split(",")));
 			
 			for(String test : listTest) {
 				Test tst = new Test(test, properties.getProperty("TEST_DIRECTORY"));
-				Target trgt = new Target(name, tst, properties.getProperty("TARGET_DIRECTORY"));
-				listTargets.add(trgt);
+				trgt.getTests().add(tst);
 			}
+			
+			listTargets.add(trgt);
+			
 		}
 		
 		return listTargets;
