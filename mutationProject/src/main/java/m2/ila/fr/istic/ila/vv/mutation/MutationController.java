@@ -12,6 +12,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
+import m2.ila.fr.istic.ila.vv.mutation.loader.TargetsLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.ArithmeticOperator;
@@ -28,10 +29,16 @@ public class MutationController {
 	private List<Test> tests;
 	private List<MutationOperator> mutators;
 	private ClassLoader classLoader;
+	private TargetsLoader targetsLoader;
 	
-	public MutationController(String targetPath, String testPath) {
+	public MutationController(String targetPath, String testPath) throws IOException {
 		this.targetPath = targetPath;
 		this.testPath = testPath;
+		
+		targetsLoader = new TargetsLoader();
+		this.targets = targetsLoader.getTargets();
+		
+		
 //		this.targets = new ArrayList<Target>();
 		this.mutators = new ArrayList<MutationOperator>();
 		
@@ -56,7 +63,7 @@ public class MutationController {
 	public void checkMutations() throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException {
 		
 		ClassPool pool = ClassPool.getDefault();
-		pool.appendClassPath(targetPath + "/target/classes");
+		pool.appendClassPath(targetPath + "/target/classes");		
 		ClassLoader classLoader = new ClassLoader();
 		List<Class<?>> classes = classLoader
 				.getClassesFromDirectory(targetPath + "/target/classes");
@@ -68,22 +75,22 @@ public class MutationController {
 			final String targetClassName = targetClass.getName();
 			System.err.println("Nom de la classe à modifier :" + targetClassName);
 			
-			// On crée la classe
-			Target target = new Target(c.getName(), null /* TODO a redeffini*/);
-			
-			// Liste des méthodes
-			CtMethod[] methods = targetClass.getDeclaredMethods();
-			
-			// Boucle sur les methodes
-			for (CtMethod method : methods) {
-				System.out.println("Method name: " + method.getName());
-				
-				//on passe les méthodes aux mutateurs pour vérification
-				for (MutationOperator mutator : mutators) {
-					mutator.checkMutate(target, method);
-				}
-				
-			}
+//			// On crée la classe
+//			Target target = new Target(c.getName(), null /* TODO a redeffini*/);
+//			
+//			// Liste des méthodes
+//			CtMethod[] methods = targetClass.getDeclaredMethods();
+//			
+//			// Boucle sur les methodes
+//			for (CtMethod method : methods) {
+//				System.out.println("Method name: " + method.getName());
+//				
+//				//on passe les méthodes aux mutateurs pour vérification
+//				for (MutationOperator mutator : mutators) {
+//					mutator.checkMutate(target, method);
+//				}
+//				
+//			}
 			
 		}
 
