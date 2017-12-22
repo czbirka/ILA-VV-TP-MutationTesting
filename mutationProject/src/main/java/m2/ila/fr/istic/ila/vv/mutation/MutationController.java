@@ -1,9 +1,17 @@
 package m2.ila.fr.istic.ila.vv.mutation;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.maven.shared.invoker.MavenInvocationException;
@@ -194,4 +202,36 @@ public class MutationController {
 		
 	}
 	
+	public void redactionBilan() throws FileNotFoundException {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));
+
+		String nom = "bilan mutations "+dateFormat.format(date);
+		PrintWriter writer = new PrintWriter(nom);
+		writer.println("BILAN MUTATIONS");
+		writer.println();
+		writer.println(date);
+		writer.println();
+		writer.println();
+		
+		for(MutationOperator mutator : mutators) {
+			writer.println(mutator.getClass());
+			writer.println();
+			for(Mutation mutation : mutator.getMutations()) {
+				writer.println(mutation.toString());
+				writer.println();
+			}
+			writer.println();
+			writer.println();
+		}
+		
+		
+		
+		
+		writer.close();
+		
+
+	}
 }

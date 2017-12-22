@@ -71,7 +71,7 @@ public class BooleanOperator implements MutationOperator {
 			if ( result.getExitCode() == 0 ) {
 		        mutation.setMutationFound(false);
 		    } else {
-		        mutation.setMutationFound(true);;
+		        mutation.setMutationFound(true);
 		    }
 			mutations.add(mutation);
 			

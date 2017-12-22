@@ -172,8 +172,7 @@ public class ComparisonOperator implements MutationOperator {
 
 	@Override
 	public List<Mutation> getMutations() {
-		// TODO Auto-generated method stub
-		return null;
+		return mutations;
 	}
 
 }

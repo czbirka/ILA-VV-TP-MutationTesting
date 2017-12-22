@@ -57,6 +57,9 @@ public class Mutation{
 		if(this.mutationFound) {
 			txt += "MUTATION FOUND : ok\n";
 		}
+		else {
+			txt += "MUTATION NOT FOUND !!!!!!! : DANGER\n";
+		}
 		return txt;
 	}
 }
