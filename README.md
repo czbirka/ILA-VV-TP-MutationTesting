@@ -24,7 +24,7 @@ Four types of mutations are implemented:
 
 * Replace all the instructions in the boby of a *boolean* method by `return true;` and `return false;`.  
 
-* Replace arithmetic operator with other one:  
+* Replace arithmetic operator by other one:  
 
 | operator | replaced by |
 |-------------------|-------------|
@@ -34,7 +34,7 @@ Four types of mutations are implemented:
 |        /          |      *      |
    
 
-* Replace comparison operator with other one:   
+* Replace comparison operator by other one:   
 
 | operator | replaced by |
 |-------------------|-------------|
@@ -44,3 +44,7 @@ Four types of mutations are implemented:
 |        >=          |      >      |
 |        ==          |      !=      |
 |        !=          |      ==      |
+   
+### Report   
+A report is generate at each time. It is save in the folder of the project. The nama of this report contains the date and the time:   
+example : *bilan mutations 2017_12_22 19:42:01*
