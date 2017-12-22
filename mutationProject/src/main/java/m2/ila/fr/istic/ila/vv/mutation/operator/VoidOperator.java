@@ -24,7 +24,7 @@ import javassist.bytecode.MethodInfo;
 import m2.ila.fr.istic.ila.vv.Constants;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation1;
+import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class VoidOperator implements MutationOperator {
@@ -46,7 +46,8 @@ public class VoidOperator implements MutationOperator {
 
 	}
 
-	public void checkMutate(Target target, CtMethod method) throws NotFoundException, CannotCompileException, IOException, MavenInvocationException {
+	public void checkMutate(CtMethod method) 
+			throws NotFoundException, CannotCompileException, IOException, MavenInvocationException {
 		
 		CtClass returnType = method.getReturnType();
 		if (returnType.equals(CtClass.voidType)) {
@@ -63,11 +64,8 @@ public class VoidOperator implements MutationOperator {
 			
 			classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 			
-			//test
-			System.out.println("pouet void");
 			// Lancer les tests
 			InvocationRequest request = new DefaultInvocationRequest();
-			//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
 			request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
 			request.setGoals(Arrays.asList("test"));
 
@@ -75,7 +73,14 @@ public class VoidOperator implements MutationOperator {
 			invoker.setMavenHome(new File("/usr/share/maven"));
 			InvocationResult result = invoker.execute(request);			
 			
-			
+			//stockage résultat
+			Mutation mutation = new Mutation(classMethod, method, "{}");
+			if ( result.getExitCode() == 0 ) {
+		        mutation.setMutationFound(false);
+		    } else {
+		        mutation.setMutationFound(true);;
+		    }
+			mutations.add(mutation);
 			
 			if(modified.getDeclaringClass().isFrozen()) {
 				modified.getDeclaringClass().defrost();

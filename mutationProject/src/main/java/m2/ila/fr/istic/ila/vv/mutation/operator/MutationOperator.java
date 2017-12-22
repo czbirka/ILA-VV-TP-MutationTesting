@@ -15,6 +15,6 @@ import m2.ila.fr.istic.ila.vv.target.Target;
 public interface MutationOperator {
 
 	public void doMutate(Mutation mutation);
-	public void checkMutate(Target target, CtMethod method) throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException;
+	public void checkMutate(CtMethod method) throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException;
 	public List<Mutation> getMutations();
 }

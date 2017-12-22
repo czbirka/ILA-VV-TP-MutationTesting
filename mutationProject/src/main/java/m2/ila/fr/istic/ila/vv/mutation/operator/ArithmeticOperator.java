@@ -26,7 +26,7 @@ import javassist.bytecode.Opcode;
 import m2.ila.fr.istic.ila.vv.Constants;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation1;
+import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class ArithmeticOperator implements MutationOperator {
@@ -46,8 +46,9 @@ public class ArithmeticOperator implements MutationOperator {
 
 	}
 
-	public void checkMutate(Target target, CtMethod method)
-			throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException {
+	public void checkMutate(CtMethod method)
+			throws NotFoundException, CannotCompileException, IOException, 
+			BadBytecode, MavenInvocationException {
 
 		CtClass classMethod = method.getDeclaringClass();
 		if (classMethod.isFrozen()) {
@@ -63,7 +64,7 @@ public class ArithmeticOperator implements MutationOperator {
 			// On itère sur les paramètres
 			CodeIterator iterator = attributs.iterator();
 			int previousOpCode = -1;
-			boolean modif = false;
+			String modif = "";
 			while (iterator.hasNext()) {
 				// position de l'itérateur
 				int pos = iterator.next();
@@ -73,82 +74,127 @@ public class ArithmeticOperator implements MutationOperator {
 				case Opcode.IADD:
 					iterator.writeByte(Opcode.ISUB, pos);
 					previousOpCode = Opcode.IADD;
-					System.out.println("pouet +i");
-					modif = true;
+					modif = "+ remplacé par - (int)";
+					break;
+				case Opcode.ISUB:
+					iterator.writeByte(Opcode.IADD, pos);
+					previousOpCode = Opcode.ISUB;
+					modif = "- remplacé par + (int)";
 					break;
 				case Opcode.FADD:
 					iterator.writeByte(Opcode.FSUB, pos);
 					previousOpCode = Opcode.FADD;
-					System.out.println("pouet +f");
-					modif = true;
+					modif = "+ remplacé par - (float)";
+					break;
+				case Opcode.FSUB:
+					iterator.writeByte(Opcode.FADD, pos);
+					previousOpCode = Opcode.FSUB;
+					modif = "- remplacé par + (float)";
 					break;
 				case Opcode.LADD:
 					iterator.writeByte(Opcode.LSUB, pos);
 					previousOpCode = Opcode.LADD;
-					System.out.println("pouet +l");
-					modif = true;
+					modif = "+ remplacé par - (long)";
+					break;
+				case Opcode.LSUB:
+					iterator.writeByte(Opcode.LADD, pos);
+					previousOpCode = Opcode.LSUB;
+					modif = "- remplacé par + (long)";
 					break;
 				case Opcode.DADD:
 					iterator.writeByte(Opcode.DSUB, pos);
 					previousOpCode = Opcode.DADD;
-					System.out.println("pouet +d");
-					modif = true;
+					modif = "+ remplacé par - (double)";
 					break;
 				case Opcode.DSUB:
 					iterator.writeByte(Opcode.DADD, pos);
 					previousOpCode = Opcode.DSUB;
-					System.out.println("pouet -d");
-					modif = true;
+					modif = "- remplacé par + (double)";
+					break;
+				case Opcode.IMUL:
+					iterator.writeByte(Opcode.IDIV, pos);
+					previousOpCode = Opcode.IMUL;
+					modif = "* remplacé par / (int)";
+					break;
+				case Opcode.IDIV:
+					iterator.writeByte(Opcode.IMUL, pos);
+					previousOpCode = Opcode.IDIV;
+					modif = "/ remplacé par * (int)";
+					break;
+				case Opcode.FMUL:
+					iterator.writeByte(Opcode.FDIV, pos);
+					previousOpCode = Opcode.FMUL;
+					modif = "* remplacé par / (float)";
+					break;
+				case Opcode.FDIV:
+					iterator.writeByte(Opcode.FMUL, pos);
+					previousOpCode = Opcode.FDIV;
+					modif = "/ remplacé par * (float)";
+					break;
+				case Opcode.LMUL:
+					iterator.writeByte(Opcode.LDIV, pos);
+					previousOpCode = Opcode.LMUL;
+					modif = "* remplacé par / (long)";
+					break;
+				case Opcode.LDIV:
+					iterator.writeByte(Opcode.LMUL, pos);
+					previousOpCode = Opcode.LDIV;
+					modif = "/ remplacé par * (long)";
+					break;
+				case Opcode.DMUL:
+					iterator.writeByte(Opcode.DDIV, pos);
+					previousOpCode = Opcode.DMUL;
+					modif = "* remplacé par / (double)";
+					break;
+				case Opcode.DDIV:
+					iterator.writeByte(Opcode.DMUL, pos);
+					previousOpCode = Opcode.DDIV;
+					modif = "/ remplacé par * (double)";
 					break;
 				default:
 					break;
 				} // Switch
 				
-				if(modif) {
+				if(!modif.equals("")) {
 					
 					// On génère le nouveau .class dans le repertoire de la classe
 					if (classMethod.isFrozen()) {
 						classMethod.defrost();
 					}
-					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
+					
 					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 	
 					// Lancer les tests
 					InvocationRequest request = new DefaultInvocationRequest();
-					//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
 					request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
 					request.setGoals(Arrays.asList("test"));
-	
 					Invoker invoker = new DefaultInvoker();
 					invoker.setMavenHome(new File("/usr/share/maven"));
 					InvocationResult result = invoker.execute(request);
 				
-					// Editer le rapport avec result
-					//NOT IMPLEMENTED YET
-
 					// Remettre comme c'etait
 					if (classMethod.isFrozen()) {
 						classMethod.defrost();
 					}
 					iterator.writeByte(previousOpCode, pos);
-					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
 					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 					
-					modif=false;
+					//stockage résultat
+					Mutation mutation = new Mutation(classMethod, method, modif);
+					if ( result.getExitCode() == 0 ) {
+				        mutation.setMutationFound(false);
+				    } else {
+				        mutation.setMutationFound(true);;
+				    }
+					mutations.add(mutation);
+					
+					modif="";
 				}//if modif
 				
 			} // while
 				
-			
-				
 		} // if
 
-//		CtClass returnType = method.getReturnType();
-//		if (returnType.equals(CtClass.doubleType)) {
-//			System.out.println("name: " + method.getName() + Constants.DOUBLE_TYPE_METHOD);
-//			Mutation mutation = new Mutation1(target, method);
-//			mutations.add(mutation);
-//		}
 	}
 
 	public List<Mutation> getMutations() {

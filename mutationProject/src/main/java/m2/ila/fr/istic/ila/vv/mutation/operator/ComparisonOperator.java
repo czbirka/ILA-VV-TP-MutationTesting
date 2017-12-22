@@ -46,7 +46,7 @@ public class ComparisonOperator implements MutationOperator {
 	}
 
 	@Override
-	public void checkMutate(Target target, CtMethod method)
+	public void checkMutate(CtMethod method)
 			throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException {
 
 		CtClass classMethod = method.getDeclaringClass();
@@ -64,7 +64,7 @@ public class ComparisonOperator implements MutationOperator {
 			int previousOpCode = -1;
 			int lastCode = -2;
 			int actualCode = -2;
-			boolean modif = false;
+			String modif = "";
 			while (iterator.hasNext()) {
 				
 				// position de l'itérateur
@@ -72,8 +72,6 @@ public class ComparisonOperator implements MutationOperator {
 				
 				lastCode = actualCode;
 				actualCode = iterator.byteAt(pos);
-
-				System.out.println(pos + " " +iterator.byteAt(pos));
 				
 				//
 				switch (iterator.byteAt(pos)) {
@@ -82,8 +80,7 @@ public class ComparisonOperator implements MutationOperator {
 					if(lastCode == Opcode.DCMPL) {
 						iterator.writeByte(Opcode.IFLT, pos);
 						previousOpCode = Opcode.IFLE;
-						System.out.println("pouet >");
-						modif = true;
+						modif = "> remplacé par >=";
 					}
 					break;
 				//on remplace >= par >
@@ -91,8 +88,7 @@ public class ComparisonOperator implements MutationOperator {
 					if(lastCode == Opcode.DCMPL) {
 						iterator.writeByte(Opcode.IFLE, pos);
 						previousOpCode = Opcode.IFLT;
-						System.out.println("pouet >=");
-						modif = true;
+						modif = ">= remplacé par >";
 					}
 					break;
 				//on remplace < par <=
@@ -100,8 +96,7 @@ public class ComparisonOperator implements MutationOperator {
 					if(lastCode == Opcode.DCMPG) {
 						iterator.writeByte(Opcode.IFGT, pos);
 						previousOpCode = Opcode.IFGE;
-						System.out.println("pouet <");
-						modif = true;
+						modif = "< remplacé par <=";
 					}
 					break;
 				//on remplace <= par <
@@ -109,8 +104,7 @@ public class ComparisonOperator implements MutationOperator {
 						if(lastCode == Opcode.DCMPG) {
 						iterator.writeByte(Opcode.IFGE, pos);
 						previousOpCode = Opcode.IFGT;
-						System.out.println("pouet <=");
-						modif = true;
+						modif = "<= remplacé par <";
 					}
 					break;
 				//on remplace == par !=
@@ -118,8 +112,7 @@ public class ComparisonOperator implements MutationOperator {
 					if(lastCode == Opcode.DCMPL) {
 						iterator.writeByte(Opcode.IFEQ, pos);
 						previousOpCode = Opcode.IFNE;
-						System.out.println("pouet ==");
-						modif = true;
+						modif = "== remplacé par !=";
 					}
 					break;
 				//on remplace != par ==
@@ -127,26 +120,23 @@ public class ComparisonOperator implements MutationOperator {
 					if(lastCode == Opcode.DCMPL) {
 						iterator.writeByte(Opcode.IFNE, pos);
 						previousOpCode = Opcode.IFEQ;
-						System.out.println("pouet !=");
-						modif = true;
+						modif = "!= remplacé par ==";
 					}
 					break;
 				default:
 					break;
 				} // Switch
 				
-				if(modif) {
+				if(!modif.equals("")) {
 					
 					// On génère le nouveau .class dans le repertoire de la classe
 					if (classMethod.isFrozen()) {
 						classMethod.defrost();
 					}
-					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
 					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 	
 					// Lancer les tests
 					InvocationRequest request = new DefaultInvocationRequest();
-					//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
 					request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
 					request.setGoals(Arrays.asList("test"));
 	
@@ -154,9 +144,6 @@ public class ComparisonOperator implements MutationOperator {
 					invoker.setMavenHome(new File("/usr/share/maven"));
 					InvocationResult result = invoker.execute(request);
 				
-					// Editer le rapport avec result
-					//NOT IMPLEMENTED YET
-
 					// Remettre comme c'etait
 					if (classMethod.isFrozen()) {
 						classMethod.defrost();
@@ -165,21 +152,22 @@ public class ComparisonOperator implements MutationOperator {
 					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
 					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 					
-					modif=false;
+					//stockage résultat
+					Mutation mutation = new Mutation(classMethod, method, modif);
+					if ( result.getExitCode() == 0 ) {
+				        mutation.setMutationFound(false);
+				    } else {
+				        mutation.setMutationFound(true);;
+				    }
+					mutations.add(mutation);
+					
+					modif="";
 				}//if modif
 				
 			} // while
-				
-			
-				
+	
 		} // if
 
-//		CtClass returnType = method.getReturnType();
-//		if (returnType.equals(CtClass.doubleType)) {
-//			System.out.println("name: " + method.getName() + Constants.DOUBLE_TYPE_METHOD);
-//			Mutation mutation = new Mutation1(target, method);
-//			mutations.add(mutation);
-//		}
 	}
 
 	@Override
