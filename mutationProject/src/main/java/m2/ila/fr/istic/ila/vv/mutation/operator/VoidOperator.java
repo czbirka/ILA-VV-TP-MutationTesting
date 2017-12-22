@@ -64,7 +64,7 @@ public class VoidOperator implements MutationOperator {
 			classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 			
 			//test
-			System.out.println("pouet >");
+			System.out.println("pouet void");
 			// Lancer les tests
 			InvocationRequest request = new DefaultInvocationRequest();
 			//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
