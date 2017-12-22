@@ -10,11 +10,9 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public interface MutationOperator {
 
-	public void doMutate(Mutation mutation);
 	public void checkMutate(CtMethod method) throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException;
 	public List<Mutation> getMutations();
 }

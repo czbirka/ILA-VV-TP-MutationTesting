@@ -2,7 +2,6 @@ package m2.ila.fr.istic.ila.vv.mutation.mutation;
 
 import javassist.CtClass;
 import javassist.CtMethod;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class Mutation{
 

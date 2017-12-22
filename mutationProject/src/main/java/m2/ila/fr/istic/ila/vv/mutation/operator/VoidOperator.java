@@ -19,12 +19,8 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.MethodInfo;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class VoidOperator implements MutationOperator {
 
@@ -38,11 +34,6 @@ public class VoidOperator implements MutationOperator {
 		propertiesLoader = PropertiesLoader.getInstance();
     	this.properties=propertiesLoader.getProperties();
 		mutations = new ArrayList<Mutation>();
-	}
-	
-	public void doMutate(Mutation mutation) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void checkMutate(CtMethod method) 

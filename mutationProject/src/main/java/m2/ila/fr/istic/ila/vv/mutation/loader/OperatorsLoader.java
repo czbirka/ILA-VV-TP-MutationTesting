@@ -3,7 +3,6 @@ package m2.ila.fr.istic.ila.vv.mutation.loader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -13,7 +12,6 @@ import m2.ila.fr.istic.ila.vv.mutation.operator.ComparisonOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.MutationOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.Operator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.VoidOperator;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class OperatorsLoader {
 

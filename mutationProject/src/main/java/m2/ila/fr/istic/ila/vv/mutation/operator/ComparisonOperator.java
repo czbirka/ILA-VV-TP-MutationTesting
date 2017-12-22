@@ -25,7 +25,6 @@ import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Opcode;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class ComparisonOperator implements MutationOperator {
 
@@ -37,12 +36,6 @@ public class ComparisonOperator implements MutationOperator {
 		propertiesLoader = PropertiesLoader.getInstance();
     	this.properties=propertiesLoader.getProperties();
 		mutations = new ArrayList<Mutation>();
-	}
-	
-	@Override
-	public void doMutate(Mutation mutation) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

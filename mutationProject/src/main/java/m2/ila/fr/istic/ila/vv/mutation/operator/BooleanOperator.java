@@ -21,8 +21,6 @@ import javassist.CtNewMethod;
 import javassist.NotFoundException;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.target.Target;
 
 public class BooleanOperator implements MutationOperator {
 
@@ -114,11 +112,6 @@ public class BooleanOperator implements MutationOperator {
 
 	public List<Mutation> getMutations() {
 		return mutations;
-	}
-
-	public void doMutate(Mutation mutation) {
-		System.out.println(mutation.toString());
-		
 	}
 
 }
