@@ -25,6 +25,7 @@ Four types of mutations are implemented:
 * Replace all the instructions in the boby of a *boolean* method by `return true;` and `return false;`.  
 
 * Replace arithmetic operator with other one:  
+
 | operator | replaced by |
 |-------------------|-------------|
 | +          |      -      |
@@ -33,7 +34,8 @@ Four types of mutations are implemented:
 |        /          |      *      |
    
 
-* Replace comparison operator with other one:
+* Replace comparison operator with other one:   
+
 | operator | replaced by |
 |-------------------|-------------|
 |        <          |      <=      |
