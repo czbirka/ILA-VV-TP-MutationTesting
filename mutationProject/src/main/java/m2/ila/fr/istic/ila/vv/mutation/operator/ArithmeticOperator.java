@@ -113,15 +113,15 @@ public class ArithmeticOperator implements MutationOperator {
 					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
 					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
 	
-//					// Lancer les tests
-//					InvocationRequest request = new DefaultInvocationRequest();
-//					//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
-//					request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
-//					request.setGoals(Arrays.asList("test"));
-//	
-//					Invoker invoker = new DefaultInvoker();
-//					invoker.setMavenHome(new File("/usr/share/maven"));
-//					InvocationResult result = invoker.execute(request);
+					// Lancer les tests
+					InvocationRequest request = new DefaultInvocationRequest();
+					//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
+					request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
+					request.setGoals(Arrays.asList("test"));
+	
+					Invoker invoker = new DefaultInvoker();
+					invoker.setMavenHome(new File("/usr/share/maven"));
+					InvocationResult result = invoker.execute(request);
 				
 					// Editer le rapport avec result
 					//NOT IMPLEMENTED YET
