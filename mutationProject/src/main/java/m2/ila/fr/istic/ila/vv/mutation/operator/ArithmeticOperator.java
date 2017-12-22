@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
@@ -22,7 +24,7 @@ import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Opcode;
 import m2.ila.fr.istic.ila.vv.Constants;
-import m2.ila.fr.istic.ila.vv.Properties;
+import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation1;
 import m2.ila.fr.istic.ila.vv.target.Target;
@@ -30,8 +32,12 @@ import m2.ila.fr.istic.ila.vv.target.Target;
 public class ArithmeticOperator implements MutationOperator {
 
 	private List<Mutation> mutations;
+	private Properties properties = new Properties();
 
-	public ArithmeticOperator() {
+	public ArithmeticOperator() throws IOException {
+		PropertiesLoader propertiesLoader;
+		propertiesLoader = PropertiesLoader.getInstance();
+    	this.properties=propertiesLoader.getProperties();
 		mutations = new ArrayList<Mutation>();
 	}
 
@@ -57,6 +63,7 @@ public class ArithmeticOperator implements MutationOperator {
 			// On itère sur les paramètres
 			CodeIterator iterator = attributs.iterator();
 			int previousOpCode = -1;
+			boolean modif = false;
 			while (iterator.hasNext()) {
 				// position de l'itérateur
 				int pos = iterator.next();
@@ -66,47 +73,68 @@ public class ArithmeticOperator implements MutationOperator {
 				case Opcode.IADD:
 					iterator.writeByte(Opcode.ISUB, pos);
 					previousOpCode = Opcode.IADD;
+					System.out.println("pouet +i");
+					modif = true;
 					break;
 				case Opcode.FADD:
 					iterator.writeByte(Opcode.FSUB, pos);
 					previousOpCode = Opcode.FADD;
+					System.out.println("pouet +f");
+					modif = true;
 					break;
 				case Opcode.LADD:
 					iterator.writeByte(Opcode.LSUB, pos);
 					previousOpCode = Opcode.LADD;
+					System.out.println("pouet +l");
+					modif = true;
 					break;
 				case Opcode.DADD:
 					iterator.writeByte(Opcode.DSUB, pos);
 					previousOpCode = Opcode.DADD;
+					System.out.println("pouet +d");
+					modif = true;
 					break;
 				default:
 					break;
 				} // Switch
-
-				// On génère le nouveau .class dans le repertoire de la classe
-				if (classMethod.isFrozen()) {
-					classMethod.defrost();
-				}
-				classMethod.writeFile(Properties.TARGET_CLASSPATH);
-
-				// Lancer les tests
-				InvocationRequest request = new DefaultInvocationRequest();
-				request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
-				request.setGoals(Arrays.asList("test"));
-
-				Invoker invoker = new DefaultInvoker();
-				invoker.setMavenHome(new File("/usr/share/maven"));
-				invoker.execute(request);
-
-				// Editer le rapport
-
-				// Remettre comme c'etait
-				if (classMethod.isFrozen()) {
-					classMethod.defrost();
-				}
-				iterator.writeByte(previousOpCode, pos);
-				classMethod.writeFile(Properties.TARGET_CLASSPATH);
+				
+				if(modif) {
+					
+					// On génère le nouveau .class dans le repertoire de la classe
+					if (classMethod.isFrozen()) {
+						classMethod.defrost();
+					}
+					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
+					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
+	
+					// Lancer les tests
+					InvocationRequest request = new DefaultInvocationRequest();
+					//request.setPomFile(new File(Properties.TARGET_DIRECTORY + "/pom.xml"));
+					request.setPomFile(new File(properties.getProperty("PROJECT_DIRECTORY") + "/pom.xml"));
+					request.setGoals(Arrays.asList("test"));
+	
+					Invoker invoker = new DefaultInvoker();
+					invoker.setMavenHome(new File("/usr/share/maven"));
+					InvocationResult result = invoker.execute(request);
+				
+					// Editer le rapport avec result
+					//NOT IMPLEMENTED YET
+	
+					// Remettre comme c'etait
+					if (classMethod.isFrozen()) {
+						classMethod.defrost();
+					}
+					iterator.writeByte(previousOpCode, pos);
+					//classMethod.writeFile(Properties.TARGET_CLASSPATH);
+					classMethod.writeFile(properties.getProperty("TARGET_DIRECTORY"));
+					
+					modif=false;
+				}//if modif
+				
 			} // while
+				
+			
+				
 		} // if
 
 //		CtClass returnType = method.getReturnType();

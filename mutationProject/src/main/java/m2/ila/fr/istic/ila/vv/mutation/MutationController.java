@@ -39,6 +39,7 @@ public class MutationController {
 	private TargetsLoader targetsLoader;
 	private OperatorsLoader operatorsLoader;
 	
+	
 	public MutationController(String targetPath, String testPath) throws IOException {
 		
 		this.targetPath = targetPath;
@@ -140,9 +141,6 @@ public class MutationController {
 							}
 							
 						}
-						
-						
-						//mutation.getMethod().setBody(mutation.getMutateCode());
 
 						System.out.println("method was mutated => " + mutation.getMethod().getName());
 						

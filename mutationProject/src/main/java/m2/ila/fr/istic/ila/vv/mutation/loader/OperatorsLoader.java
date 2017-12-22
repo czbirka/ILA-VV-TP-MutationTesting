@@ -26,7 +26,7 @@ public class OperatorsLoader {
     	this.properties=propertiesLoader.getProperties();
 	}
 	
-	public List<MutationOperator> getOperators(){
+	public List<MutationOperator> getOperators() throws IOException{
 		
 		List<MutationOperator> listOperators = new ArrayList<MutationOperator>();
 		
