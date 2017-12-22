@@ -25,9 +25,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
-import m2.ila.fr.istic.ila.vv.RunAClass;
 import m2.ila.fr.istic.ila.vv.mutation.loader.OperatorsLoader;
-import m2.ila.fr.istic.ila.vv.mutation.loader.TargetsLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
 import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.ArithmeticOperator;
@@ -44,7 +42,6 @@ public class MutationController {
 	private List<Test> tests;
 	private List<MutationOperator> mutators;
 	private ClassLoader classLoader;
-	private TargetsLoader targetsLoader;
 	private OperatorsLoader operatorsLoader;
 	
 	public MutationController(String projectPath) throws IOException {
@@ -206,7 +203,6 @@ public class MutationController {
 		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
 		Date date = new Date();
-		System.out.println(dateFormat.format(date));
 
 		String nom = "bilan mutations "+dateFormat.format(date);
 		PrintWriter writer = new PrintWriter(nom);
@@ -226,9 +222,6 @@ public class MutationController {
 			writer.println();
 			writer.println();
 		}
-		
-		
-		
 		
 		writer.close();
 		

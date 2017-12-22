@@ -29,6 +29,8 @@ public class MutationTestingApp {
 		mutationController.checkMutations();
 
 		mutationController.redactionBilan();
+		
+		System.out.println("FINISHED !");
 	}
 
 }
