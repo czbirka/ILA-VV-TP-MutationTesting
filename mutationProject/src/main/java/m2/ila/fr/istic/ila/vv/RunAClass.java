@@ -12,7 +12,7 @@ public class RunAClass {
         JUnitCore core = new JUnitCore();
        // Result result = core.run(BinOpTest.class, AnotherInputTest.class);
 //        Result result = core.run(BinOpTest.class);
-//        System.out.println("FINISHED");
+//        System.out.println("FINISHED");testPath
 //        System.out.println(String.format("| IGNORED: %d", result.getIgnoreCount()));
 //        System.out.println(String.format("| FAILURES: %d", result.getFailureCount()));
 //        System.out.println(String.format("| RUN: %d", result.getRunCount()));

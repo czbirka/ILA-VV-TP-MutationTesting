@@ -1,6 +1,7 @@
 package master2.binop;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -28,5 +29,11 @@ public class BinOpTest {
 	public void testSoustraction1 () {
 		double result = BinOp.soustraction(6, 3);
 		assertEquals("Result should be ", 3.0 , result, 0.00001);
+	}
+	
+	@Test
+	public void testSuperieur1 () {
+		boolean result = BinOp.estSuperieur(4, 3);
+		assertTrue("Result should be ", true);
 	}
 }

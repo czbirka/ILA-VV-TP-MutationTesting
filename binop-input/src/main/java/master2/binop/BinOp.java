@@ -35,7 +35,7 @@ public class BinOp {
 	public static boolean estSuperieur(double param1, double param2) {
 		return (param1 > param2);
 	}
-
+	
 	public static boolean estInferieur(double param1, double param2) {
 		return (param1 < param2);
 	}

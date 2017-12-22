@@ -39,7 +39,19 @@ public class MutationController {
 	private TargetsLoader targetsLoader;
 	private OperatorsLoader operatorsLoader;
 	
-	
+	public MutationController(String projectPath) throws IOException {
+		
+		this.targetPath = projectPath + "/target/classes";
+		this.testPath = projectPath + "/target/test-classes";
+		
+		targetsLoader = new TargetsLoader();
+		this.targets = targetsLoader.getTargets();
+		
+		operatorsLoader = new OperatorsLoader();
+		this.mutators = operatorsLoader.getOperators();
+		
+	}
+
 	public MutationController(String targetPath, String testPath) throws IOException {
 		
 		this.targetPath = targetPath;

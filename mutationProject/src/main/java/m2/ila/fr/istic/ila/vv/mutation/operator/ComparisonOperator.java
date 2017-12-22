@@ -23,29 +23,29 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Opcode;
-import m2.ila.fr.istic.ila.vv.Constants;
 import m2.ila.fr.istic.ila.vv.mutation.loader.PropertiesLoader;
 import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation;
-import m2.ila.fr.istic.ila.vv.mutation.mutation.Mutation1;
 import m2.ila.fr.istic.ila.vv.target.Target;
 
-public class ArithmeticOperator implements MutationOperator {
+public class ComparisonOperator implements MutationOperator {
 
 	private List<Mutation> mutations;
 	private Properties properties = new Properties();
 
-	public ArithmeticOperator() throws IOException {
+	public ComparisonOperator() throws IOException {
 		PropertiesLoader propertiesLoader;
 		propertiesLoader = PropertiesLoader.getInstance();
     	this.properties=propertiesLoader.getProperties();
 		mutations = new ArrayList<Mutation>();
 	}
-
+	
+	@Override
 	public void doMutate(Mutation mutation) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
+	@Override
 	public void checkMutate(Target target, CtMethod method)
 			throws NotFoundException, CannotCompileException, IOException, BadBytecode, MavenInvocationException {
 
@@ -53,7 +53,6 @@ public class ArithmeticOperator implements MutationOperator {
 		if (classMethod.isFrozen()) {
 			classMethod.defrost();
 		}
-		
 		// On récupère les parametres
 		MethodInfo methodInfo = method.getMethodInfo();
 		CodeAttribute attributs = methodInfo.getCodeAttribute();
@@ -63,42 +62,74 @@ public class ArithmeticOperator implements MutationOperator {
 			// On itère sur les paramètres
 			CodeIterator iterator = attributs.iterator();
 			int previousOpCode = -1;
+			int lastCode = -2;
+			int actualCode = -2;
 			boolean modif = false;
 			while (iterator.hasNext()) {
+				
 				// position de l'itérateur
 				int pos = iterator.next();
+				
+				lastCode = actualCode;
+				actualCode = iterator.byteAt(pos);
 
-				// Suivant le code de l'opération arihmétique on remplace par son "opposé"
+				System.out.println(pos + " " +iterator.byteAt(pos));
+				
+				//
 				switch (iterator.byteAt(pos)) {
-				case Opcode.IADD:
-					iterator.writeByte(Opcode.ISUB, pos);
-					previousOpCode = Opcode.IADD;
-					System.out.println("pouet +i");
-					modif = true;
+				//on remplace > par >=
+				case Opcode.IFLE:
+					if(lastCode == Opcode.DCMPL) {
+						iterator.writeByte(Opcode.IFLT, pos);
+						previousOpCode = Opcode.IFLE;
+						System.out.println("pouet >");
+						modif = true;
+					}
 					break;
-				case Opcode.FADD:
-					iterator.writeByte(Opcode.FSUB, pos);
-					previousOpCode = Opcode.FADD;
-					System.out.println("pouet +f");
-					modif = true;
+				//on remplace >= par >
+				case Opcode.IFLT:
+					if(lastCode == Opcode.DCMPL) {
+						iterator.writeByte(Opcode.IFLE, pos);
+						previousOpCode = Opcode.IFLT;
+						System.out.println("pouet >=");
+						modif = true;
+					}
 					break;
-				case Opcode.LADD:
-					iterator.writeByte(Opcode.LSUB, pos);
-					previousOpCode = Opcode.LADD;
-					System.out.println("pouet +l");
-					modif = true;
+				//on remplace < par <=
+				case Opcode.IFGE:
+					if(lastCode == Opcode.DCMPG) {
+						iterator.writeByte(Opcode.IFGT, pos);
+						previousOpCode = Opcode.IFGE;
+						System.out.println("pouet <");
+						modif = true;
+					}
 					break;
-				case Opcode.DADD:
-					iterator.writeByte(Opcode.DSUB, pos);
-					previousOpCode = Opcode.DADD;
-					System.out.println("pouet +d");
-					modif = true;
+				//on remplace <= par <
+				case Opcode.IFGT:
+						if(lastCode == Opcode.DCMPG) {
+						iterator.writeByte(Opcode.IFGE, pos);
+						previousOpCode = Opcode.IFGT;
+						System.out.println("pouet <=");
+						modif = true;
+					}
 					break;
-				case Opcode.DSUB:
-					iterator.writeByte(Opcode.DADD, pos);
-					previousOpCode = Opcode.DSUB;
-					System.out.println("pouet -d");
-					modif = true;
+				//on remplace == par !=
+				case Opcode.IFNE:
+					if(lastCode == Opcode.DCMPL) {
+						iterator.writeByte(Opcode.IFEQ, pos);
+						previousOpCode = Opcode.IFNE;
+						System.out.println("pouet ==");
+						modif = true;
+					}
+					break;
+				//on remplace != par ==
+				case Opcode.IFEQ:
+					if(lastCode == Opcode.DCMPL) {
+						iterator.writeByte(Opcode.IFNE, pos);
+						previousOpCode = Opcode.IFEQ;
+						System.out.println("pouet !=");
+						modif = true;
+					}
 					break;
 				default:
 					break;
@@ -151,8 +182,10 @@ public class ArithmeticOperator implements MutationOperator {
 //		}
 	}
 
+	@Override
 	public List<Mutation> getMutations() {
-		return this.mutations;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

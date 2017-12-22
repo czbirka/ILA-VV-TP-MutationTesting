@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import m2.ila.fr.istic.ila.vv.mutation.operator.ArithmeticOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.BooleanOperator;
+import m2.ila.fr.istic.ila.vv.mutation.operator.ComparisonOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.DoubleOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.MutationOperator;
 import m2.ila.fr.istic.ila.vv.mutation.operator.Operator;
@@ -44,6 +45,9 @@ public class OperatorsLoader {
 			}
 			else if (name.equals(Operator.DOUBLE_OPERATOR.toString())) {
 				listOperators.add(new DoubleOperator());
+			}
+			else if (name.equals(Operator.COMPARISON_OPERATOR.toString())) {
+				listOperators.add(new ComparisonOperator());
 			}
 		}
 		
