@@ -46,5 +46,5 @@ Four types of mutations are implemented:
 |        !=          |      ==      |
    
 ### Report   
-A report is generate at each time. It is save in the folder of the project. The nama of this report contains the date and the time:   
+After all the mutations and all the tests, a report is generate at each time. It is save in the folder of the project. The nama of this report contains the date and the time:   
 example : *bilan mutations 2017_12_22 19:42:01*
